@@ -1,0 +1,19 @@
+{
+  "name": "electron-products-crud",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^3.0.10",
+    "tabulator-tables": "^4.4.3"
+  },
+  "devDependencies": {
+    "electron-reload": "^1.5.0"
+  }
+}

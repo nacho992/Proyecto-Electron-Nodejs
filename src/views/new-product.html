@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Nuevo Producto</title>
+    <link rel="stylesheet" href="./bootstrap.min.css">
+  </head>
+  <body>
+
+    <!-- Interface -->
+    <form class="p-4">
+      <div class="form-group">
+        <label >Ingresar datos de un Producto</label>
+        <input type="text" id="name" class="form-control" placeholder="Producto" autofocus>
+      </div>
+      <div class="form-group">
+        <input type="text" id="price" class="form-control" placeholder="precio">
+      </div>
+      <div class="form-group">
+        <input type="text" id="description" class="form-control" placeholder="Descripcion">
+      </div>
+      <div class="form-group">
+        <input type="text" id="cod" class="form-control" placeholder="Codigo">
+      </div>
+      <div class="form-group">
+        <input type="text" id="cantidad" class="form-control" placeholder="Cantidad disponibles">
+      </div>
+      <button class="btn btn-primary btn-block">
+        Guardar Producto
+      </button>
+    </form>
+
+    <!-- Logic -->
+    <script>
+      const { ipcRenderer } = require('electron');
+
+      const form = document.querySelector('form');
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+
+        var nameProduct = document.querySelector('#name').value;
+        var priceProduct = document.querySelector('#price').value;
+        var descProduct = document.querySelector('#description').value;
+        var cod = document.querySelector('#cod').value;
+        var cant = document.querySelector('#cantidad').value;
+
+        var newProduct = {
+          name: nameProduct,
+          price: priceProduct,
+          description: descProduct,
+          codigo: cod,
+          cantidad: cant
+        };
+
+        ipcRenderer.send('product:new', newProduct);
+      });
+
+    </script>
+
+  </body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Nuevo Cliente</title>
+    <link rel="stylesheet" href="./bootstrap.min.css">
+  </head>
+  <body>
+
+    <!-- Interface -->
+    <form class="p-4">
+      <div class="form-group">
+          <label >Ingresar datos del Cliente</label>
+        <input type="text" id="nombre" class="form-control" placeholder="Nombre" autofocus>
+      </div>
+      <div class="form-group">
+        <input type="text" id="apellido" class="form-control" placeholder="Apellido">
+      </div>
+      <div class="form-group">
+        <input type="text" id="dni" class="form-control" placeholder="DNI">
+      </div>
+      <div class="form-group">
+        <input type="text" id="tel" class="form-control" placeholder="Telefono">
+      </div>
+      <div class="form-group">
+        <input type="text" id="dir" class="form-control" placeholder="Direccion">
+      </div>
+      <div class="form-group">
+        <input type="text" id="coor" class="form-control" placeholder="e-mail">
+      </div>
+      <div class="form-group">
+        <input type="text" id="loc" class="form-control" placeholder="Localidad">
+      </div>
+      <div class="form-group">
+        <input type="text" id="fecha" class="form-control" placeholder="Fecha de pago">
+      </div>
+      <div class="form-group">
+        <input type="text" id="pago" class="form-control" placeholder="Pago efectuado?">
+      </div>
+      <button class="btn btn-primary btn-block" id="guardar">
+        Guardar Cliente
+      </button>
+    </form>
+
+    <!-- Logic -->
+    <script>
+      const { ipcRenderer } = require('electron');
+
+      const form = document.querySelector('form');
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+
+        var nombreCli = document.querySelector('#nombre').value;
+        var apellidoCli = document.querySelector('#dni').value;
+        var dniCli = document.querySelector('#apellido').value;
+        var telCli = document.querySelector('#tel').value;
+        var dirCli = document.querySelector('#dir').value;
+        var correoCli = document.querySelector('#coor').value;
+        var localidadCli = document.querySelector('#loc').value;
+        var fechadepagoCli = document.querySelector('#fecha').value;
+        var pagoCli = document.querySelector('#pago').value;
+
+        var nuevoCliente = {
+          nombre: nombreCli,
+          apellido: apellidoCli,
+          dni: dniCli,
+          dom: dirCli,
+          tel: telCli,
+          correo: correoCli,
+          localidad: localidadCli,
+          fechadepago: fechadepagoCli,
+          pago: pagoCli,
+          
+          
+        };
+        
+        ipcRenderer.send('cliente:new', nuevoCliente);
+      });
+    
+    </script>
+
+  </body>
+</html>
