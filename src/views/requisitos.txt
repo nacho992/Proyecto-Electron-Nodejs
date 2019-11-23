@@ -1,0 +1,10 @@
+primera talba
+    nombre,apellido,teledono,domicilio,numero cliente, rango de cliente.
+seguna talba (ok)
+    nombre,telefono,direccion(tabla heredara)
+    nombre,direccion,telefono,cantidad de cuotas, monto por cuota,monto total, fecha de pago.(ok)
+
+-imprimir talba
+-sumar monto total (ok)
+-ver canridad de clientes.
+-crear backup

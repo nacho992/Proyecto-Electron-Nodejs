@@ -120,7 +120,7 @@ ipcMain.on('cliente:new', (e, nuevoCliente) => {
 });
 
 
-   
+
 
 // Menu Template
 const templateMenu = [
@@ -160,6 +160,46 @@ ipcMain.on('datosJson', (e, datos) => {
 });
 
 
+
+exports.nuevoCli = () => {
+  
+  nuevaVentana = new BrowserWindow({
+    width: 500,
+    height: 430,
+    title: 'Agregar un nuevo cliente'
+  ,webPreferences: { nodeIntegration: true }});
+  nuevaVentana.setMenu(null);
+
+  nuevaVentana.loadURL(url.format({
+    pathname: path.join(__dirname, '/views/new-cliente.html'),
+    protocol: 'file',
+    slashes: true
+  }));
+  nuevaVentana.on('closed', () => {
+    nuevaVentana = null;
+  });
+}
+
+
+exports.nuevoProd = () => {
+
+  newProductWindow = new BrowserWindow({
+    width: 500,
+    height: 460,
+    title: ''
+  ,webPreferences: { nodeIntegration: true }});
+  newProductWindow.setMenu(null);
+
+  newProductWindow.loadURL(url.format({
+    pathname: path.join(__dirname, 'views/new-product.html'),
+    protocol: 'file',
+    slashes: true
+  }));
+  newProductWindow.on('closed', () => {
+    newProductWindow = null;
+  });
+
+}
 
 // if you are in Mac, just add the Name of the App
 if (process.platform === 'darwin') {

@@ -1,44 +1,72 @@
 
 const datosClientes = fs.readFileSync('src/views/tabla.json', 'utf-8');
-let misDatos = JSON.parse(datosClientes);
-
+let datosJson = JSON.parse(datosClientes);
 
 
 
 var Tabulator = require('tabulator-tables');
 
 
-function miTabla() {
+function miTabla(misDatos) {
     
     const { ipcRenderer } = require('electron');
     ipcRenderer.on('datosJson', (e, datos) => {
         misDatos =  datos
     });
 
-    
     var table = new Tabulator("#tableClientes", {
-        
+
         height:"400px",
         data:misDatos,
         clipboard:true,
         clipboardPasteAction:"replace",
         columns:[
             {title:"Nombre", field:"nombre", width:180, editor:"input",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
-            {title:"Apellido", field:"apellido", width:180, editor:"input",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
-            {title:"DNI", field:"dni", width:180, editor:"input",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
-            {title:"Domicilio", field:"dom", width:180, editor:"input",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
+            {title:"Dirección", field:"dom", width:180, editor:"input",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
             {title:"Telefono", field:"tel", width:180, editor:"input",cssClass:"table-bordered",cssClass:"table-primary"},
-            {title:"Correo", field:"correo", width:180, editor:"input",cssClass:"table-bordered",cssClass:"table-primary"},
-            {title:"Localidad", field:"localidad", width:180, editor:"input",cssClass:"table-bordered",cssClass:"table-primary"},
-            {title:"Fecha de Pago", field:"fechadepago", editor:"input" , align:"center", sorter:"date", width:180, editor:dateEditor,headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
-            {title:"Pago", field:"pago", align:"pago", editor:true, formatter:"tickCross",headerFilter:"tickCross",  headerFilterParams:{"tristate":true},headerFilterEmptyCheck:function(value){return value === null},cssClass:"table-bordered",cssClass:"table-primary"},
+            {title:"Cantidad de cuotas", field:"cantidadCuotas", width:180, editor:"select", editorParams:{values:{"1":"1", "2":"2", "3":"3", "4":"4", "5":"5", "6":"6", "7":"7", "8":"8", "9":"9", "10":"10", "11":"11", "12":"12"}},cssClass:"table-bordered",cssClass:"table-primary"},
+            {title:"Monto", field:"montoCuota", width:180, editor:"input",cssClass:"table-bordered",cssClass:"table-primary"},
+            {title:"Monto Total", field:"montoTotal", width:180,bottomCalc:"sum",cssClass:"table-bordered",cssClass:"table-primary"},
+            {title:"Fecha de Pago", field:"fechadepago", width:180, editor:"input",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
         ],
     });
     
+
+        
+    document.querySelector("#actualizarMontoTotal").addEventListener('click',e => {
+        //se actualiza Monto total
+        misDatos['montoTotal'] = table.getData().cantidadCuotas * table.getData().montoCuota
     
-    document.querySelector("#guardarCambios").addEventListener('click', e => {
+        for (let index = 0; index < misDatos.length; index++) {
+           misDatos[index]["montoTotal"] = misDatos[index]["cantidadCuotas"]*misDatos[index]["montoCuota"];
+
+        }
+
+        //se guardan los datos actulizados de la tabla en el archivo
         var data = table.getData();
+        
+        var jsonCLientes = JSON.stringify(data);
     
+        fs.writeFileSync('src/views/tabla.json', jsonCLientes, 'utf-8');
+     
+    });
+        
+
+   
+
+    document.querySelector("#guardarCambios").addEventListener('click', e => {
+
+        //se actualiza Monto total
+        misDatos['montoTotal'] = table.getData().cantidadCuotas * table.getData().montoCuota
+    
+        for (let index = 0; index < misDatos.length; index++) {
+           misDatos[index]["montoTotal"] = misDatos[index]["cantidadCuotas"]*misDatos[index]["montoCuota"];
+
+        }
+
+        //se guardan los datos actulizados de la tabla en el archivo
+        var data = table.getData();
+        
         var jsonCLientes = JSON.stringify(data);
     
         fs.writeFileSync('src/views/tabla.json', jsonCLientes, 'utf-8');
@@ -47,9 +75,28 @@ function miTabla() {
  
     
 }
-document.querySelector("#boton").addEventListener('click', miTabla);
-miTabla();
 
+
+let datosEnfecha = [];
+
+var f = new Date();
+var fechaHoy = f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear();
+console.log(fechaHoy);
+for (let index = 0; index < datosJson.length; index++) {
+    
+   if (fechaHoy === datosJson[index]["fechadepago"]) {
+
+       console.log(datosJson[index]["fechadepago"]);
+       
+       datosEnfecha.push(datosJson[index]);
+   }
+    
+}
+//miTabla(datosEnfecha);
+document.querySelector("#fechaHoy").addEventListener('click', () => { miTabla(datosEnfecha)});
+document.querySelector("#boton").addEventListener('click', () => { miTabla(datosJson)});
+
+miTabla(datosEnfecha);
 
 
 
