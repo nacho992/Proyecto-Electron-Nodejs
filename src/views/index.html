@@ -26,7 +26,7 @@
         <div class="collapse navbar-collapse" id="navbarColor01">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="#" onClick="location.reload();">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#" id="stock">Stock de productos</a>
@@ -38,30 +38,36 @@
               <a class="nav-link" href="#" id="agregarCli">Agregar Cliente</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" id="boton">clientes </a>
+              <a class="nav-link" href="#" id="boton">Clientes activos </a>
+            </li>
+            <li class="nav-item">
+              <a  class="nav-link" href="#" id="fechaHoy">Clientes con fecha 'Hoy'</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="misClientes">Mis Clientes</a>
             </li>
           </ul>
         </div>
       </nav>
-
+      
       
   
-  <button type="button" class="btn btn-primary" id="guardarCambios">Guardar cambios</button>
-  <button type="button" class="btn btn-primary" id="actualizarMontoTotal">Actualizar monto total</button>
-  <button type="button" class="btn btn-primary" id="fechaHoy">Clientes con fecha 'Hoy'</button>
+  <div id="#alert"></div>
+  <div id="tipoTabla"></div>
   <div id="tableProductos"></div>
   <div id="tableClientes"></div>
 
   
-  <script type="text/javascript" src= "C:\Users\ignac\Desktop\ProyectoElectron\src\views\VentanasNavegacion.js"></script>
-  <script type="text/javascript" src= "C:\Users\ignac\Desktop\ProyectoElectron\src\views\tablaProductos.js"></script>
-  <script type="text/javascript" src= "C:\Users\ignac\Desktop\ProyectoElectron\src\views\TablaMejorada.js"></script>
-  <script type="text/javascript" src= "C:\Users\ignac\Desktop\ProyectoElectron\src\views\cargarJson.js">  </script>
+  <button type="button" class="btn btn-primary" id="guardarCambios">Guardar cambios</button>
+  <button type="button" class="btn btn-primary" id="actualizarMontoTotal">Actualizar monto total</button>
   
 
-
- 
-
+  
+  <script type="text/javascript" src= "VentanasNavegacion.js"></script>
+  <script type="text/javascript" src= "tablaProductos.js"></script>
+  <script type="text/javascript" src= "TablaMejorada.js"></script>
+  <script type="text/javascript" src= "cargarJson.js"></script>
+  
 
   </body>
 </html>

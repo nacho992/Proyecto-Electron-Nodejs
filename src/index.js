@@ -36,6 +36,7 @@ app.on('ready', () => {
   mainWindow.on('closed', () => {
     app.quit();
   });
+ 
 
 });
 
