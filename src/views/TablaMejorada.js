@@ -7,8 +7,13 @@ let MisClientes
 if(fs.existsSync("src/views/tabla.json")){
 
         datosClientes = fs.readFileSync('src/views/tabla.json', 'utf-8');
-        datosJson = JSON.parse(datosClientes);
+        console.log(datosClientes);
+        if (datosClientes !== '') {
+            datosJson = JSON.parse(datosClientes);
+        }
+        
 }else{
+
     datosJson = []
     fs.appendFile('src/views/tabla.json', [], (err) => {
         if (err) throw err;});
@@ -17,7 +22,12 @@ if(fs.existsSync("src/views/tabla.json")){
 if(fs.existsSync("src/views/MisClientes.json")){
 
     datosCli = fs.readFileSync('src/views/MisClientes.json', 'utf-8');
-    MisClientes = JSON.parse(datosCli);
+    console.log(datosCli);
+    if (datosCli !== '') {
+        MisClientes = JSON.parse(datosCli);
+    }
+    
+
 }else{
     MisClientes = []
     fs.appendFile('src/views/MisClientes.json', [], (err) => {
@@ -267,16 +277,19 @@ var fechaHoy = f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear();
 
 
 //se recorre los archivos que se lvantaron buscando solo los que coinciden con la fecha actual.
-for (let index = 0; index < datosJson.length; index++) {
+if (datosJson != null ) {
+    for (let index = 0; index < datosJson.length; index++) {
     
-   if (fechaHoy === datosJson[index]["fechadepago"]) {
-
-       
-       datosEnfecha.push(datosJson[index]);
-
-   }
-    
+        if (fechaHoy === datosJson[index]["fechadepago"]) {
+     
+            
+            datosEnfecha.push(datosJson[index]);
+     
+        }
+         
+     }
 }
+
 
 
 //Indicadores de seguimiento para las tablas, cada tabla mostrata un titulo que referencia que tipo de tabla es.

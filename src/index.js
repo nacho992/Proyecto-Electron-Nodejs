@@ -9,7 +9,7 @@ let newProductWindow;
 let ventanaEditar;
 
 
-// Por cada cambio en algun ficher, se actualiza la pagina principal
+// Por cada cambio en algun fichero, se actualiza la pagina principal
 if(process.env.NODE_ENV !== 'production') {
   require('electron-reload')(__dirname, {
     electron: path.join(__dirname, '../node_modules', '.bin', 'electron')
@@ -102,19 +102,27 @@ function crearCliente() {
   });
 }
 
-
-
+let datosClientesParse;
+let datosCParse;
 //Recibe el mensaje con el nuevo cliente y se guarda en los archivos
 ipcMain.on('cliente:new', (e, nuevoCliente) => {
   // recibe mensaje de new-cliente
-  console.log(nuevoCliente);
 
-  const datosCliente = fs.readFileSync('src/views/tabla.json', 'utf-8'); //Leo Json que contiene cantidad de cuotas y montos.
+
+  const datosClientes = fs.readFileSync('src/views/tabla.json', 'utf-8'); //Leo Json que contiene cantidad de cuotas y montos.
+  if (datosClientes != '' ) {            //se verifica que si el archivo no estaba vacio.
+     datosClientesParse = JSON.parse(datosClientes);
+  } else {
+     datosClientesParse = []
+  }
+
   const datosC = fs.readFileSync('src/views/MisClientes.json', 'utf-8');
+  if (datosC != '' ) {
+    datosCParse = JSON.parse(datosC);
+  } else {
+    datosCParse = []
+  }
   
-
-  const datosClientesParse = JSON.parse(datosCliente);
-  const datosCParse = JSON.parse(datosC);
 
 
   //se verifica por numero de cliente que no se repita
