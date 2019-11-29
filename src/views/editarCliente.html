@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./bootstrap.min.css">
+    <title>Editar Cliente</title>
+</head>
+<body>
+
+  <script>
+    
+  
+      const fs = require('fs');
+
+      let datosClientes = fs.readFileSync('src/views/tabla.json', 'utf-8');
+      let datosJson = JSON.parse(datosClientes);
+
+      let datosCli = fs.readFileSync('src/views/MisClientes.json', 'utf-8');
+      let MisClientes = JSON.parse(datosCli);
+
+      let clienteEditar = {}
+      let pos;
+      for (let index = 0; index < datosJson.length; index++) {
+        if(datosJson[index]["nombre"].indexOf('*') !== -1){
+            clienteEditar = datosJson[index]
+            pos = index;
+        }
+      };
+      let clienteMis = {}
+      let posMis;
+      for (let index = 0; index < MisClientes.length; index++) {
+        if(MisClientes[index]["nombre"].indexOf('*') !== -1){
+          clienteMis = MisClientes[index]
+            posMis = index;
+        }
+      };
+      
+
+  </script>
+
+
+        <form class="p-4">
+                <div class="form-group">
+                    <label >Ingresar datos del Cliente</label>
+                  <input type="text" id="nombre" class="form-control" placeholder="nombre" autofocus>
+                </div>
+                <div class="form-group">
+                  <input type="text" id="apellido" class="form-control" placeholder="Apellido" value="">
+                </div>
+                <div class="form-group">
+                  <input type="text" id="tel" class="form-control" placeholder="Telefono">
+                </div>
+                <div class="form-group">
+                  <input type="text" id="dir" class="form-control" placeholder="Direccion">
+                </div>
+                <div class="form-group">
+                  <input type="text" id="numCli" class="form-control" placeholder="Número de cliente">
+                </div>
+                <div class="form-group">
+                  <input type="text" id="rep" class="form-control" placeholder="reputación">
+                </div>
+                <button class="btn btn-primary btn-block" id="guardar">
+                  Guardar Cliente
+                </button>
+              </form>
+
+
+              <script>
+                    console.log(clienteEditar);
+                    const form = document.querySelector('form');
+                    form.nombre.value = clienteEditar["nombre"];
+                    form.apellido.value = clienteEditar["apellido"];
+                    form.tel.value = clienteEditar["tel"];
+                    form.dir.value = clienteEditar["dom"];
+                    form.numCli.value = clienteEditar["numCliente"];
+                    form.rep.value = clienteEditar["reputacion"];
+
+                    form.addEventListener('submit', e => {
+                          e.preventDefault();
+
+                          //---------para un archivos--------------
+                          clienteEditar["nombre"] = document.querySelector('#nombre').value;
+                          clienteEditar["apellido"] = document.querySelector('#apellido').value;
+                          clienteEditar["tel"] = document.querySelector('#tel').value;
+                          clienteEditar["dom"] = document.querySelector('#dir').value;
+                          clienteEditar["numCliente"] = document.querySelector('#numCli').value;
+                          clienteEditar["reputacion"] = document.querySelector('#rep').value;
+                          //----------para otro archivo-------------------------------------
+                          clienteMis["nombre"] = document.querySelector('#nombre').value;
+                          clienteMis["apellido"] = document.querySelector('#apellido').value;
+                          clienteMis["tel"] = document.querySelector('#tel').value;
+                          clienteMis["dom"] = document.querySelector('#dir').value;
+                          clienteMis["numCliente"] = document.querySelector('#numCli').value;
+                          clienteMis["reputacion"] = document.querySelector('#rep').value;
+
+
+                        
+                      datosJson[pos] = clienteEditar;
+                      MisClientes[posMis] = clienteMis;
+                      
+
+                      const jsonProd = JSON.stringify(datosJson);
+                      const MisClientesSt = JSON.stringify(MisClientes);
+
+                      fs.writeFileSync('src/views/tabla.json', jsonProd, 'utf-8');
+                      fs.writeFileSync('src/views/MisClientes.json', MisClientesSt, 'utf-8');
+                      window.close();
+                    });
+              </script>
+
+</body>
+</html>

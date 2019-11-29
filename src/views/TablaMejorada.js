@@ -1,16 +1,18 @@
 
-
-
-
+//se levanta los datos del archivo
 const datosClientes = fs.readFileSync('src/views/tabla.json', 'utf-8');
 let datosJson = JSON.parse(datosClientes);
 
+const datosCli = fs.readFileSync('src/views/MisClientes.json', 'utf-8');
+let MisClientes = JSON.parse(datosCli);
 
 
 var Tabulator = require('tabulator-tables');
 
 
 function miTabla(misDatos) {
+    document.getElementById("actualizarMontoTotal").disabled = false
+    document.getElementById("agregar").disabled = false
 
     var dateEditor = function(cell, onRendered, success, cancel){
         //cell - the cell component for the editable cell
@@ -61,24 +63,26 @@ function miTabla(misDatos) {
         return input;
     };
     
-    const { ipcRenderer } = require('electron');
-    ipcRenderer.on('datosJson', (e, datos) => {
-        misDatos =  datos
-    });
 
     var table = new Tabulator("#tableClientes", {
+
+        selectable:true,
         printConfig:{
             columnGroups:false, //do not include column groups in column headers for HTML table
             rowGroups:false, //do not include row groups in HTML table
             columnCalcs:false, //do not include column calcs in HTML table
         },
+        printAsHtml:true,
+        printVisibleRows:false,
         footerElement:"<button type=button class=btn btn-primary id=imprimir>Imprimir</button>",
         height:"400px",
         data:misDatos,
         clipboard:true,
         clipboardPasteAction:"replace",
         columns:[
+            {formatter: "rowSelection", titleFormatter: "rowSelection", align: "center", headerSort: false,print:false},
             {title:"Nombre", field:"nombre", width:180,bottomCalc:"count", editor:"input",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
+            {title:"Zona", field:"zona", width:180, editor:"input",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
             {title:"Dirección", field:"dom", width:180, editor:"input",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
             {title:"Telefono", field:"tel", width:180, editor:"input",cssClass:"table-bordered",cssClass:"table-primary"},
             {title:"Cantidad de cuotas", field:"cantidadCuotas", width:180, editor:"number",cssClass:"table-bordered",cssClass:"table-primary"},
@@ -87,9 +91,33 @@ function miTabla(misDatos) {
             {title:"Fecha de Pago", field:"fechadepago", width:180, editor:dateEditor, headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
         ],
     });
+
+
+
+    document.querySelector("#agregar").addEventListener('click', () => {
+
+        var cliAgregado;
+
+        //index.BuscarCliente();
+
+        const { ipcRenderer } = require('electron');
+        ipcRenderer.on('cliente',(e,numero) => {
+                
+            const numCli = numero;
+            for (let index = 0; index < MisClientes.length; index++) {
+                if (MisClientes[index]["numCliente"] === numCli) {
+                    cliAgregado = MisClientes[index];
+                }
+            }
+            table.addRow(cliAgregado);
+            
+        });
+    });
+
+
     
 
-        
+    
     document.querySelector("#actualizarMontoTotal").addEventListener('click',e => {
         //se actualiza Monto total
         misDatos['montoTotal'] = table.getData().cantidadCuotas * table.getData().montoCuota
@@ -107,6 +135,17 @@ function miTabla(misDatos) {
         fs.writeFileSync('src/views/tabla.json', jsonCLientes, 'utf-8');
     
     });
+
+
+    //Eliminar seleccionados.
+    document.querySelector("#borrarfila").addEventListener('click', e => {
+        var selectedRows = table.getSelectedRows ();
+        for (let index = 0; index < selectedRows.length; index++) {
+            selectedRows[index].delete();
+            
+        }
+   
+    })
         
 
    
@@ -121,12 +160,14 @@ function miTabla(misDatos) {
 
         }
 
+
         //se guardan los datos actulizados de la tabla en el archivo
         var data = table.getData();
         
         var jsonCLientes = JSON.stringify(data);
     
         fs.writeFileSync('src/views/tabla.json', jsonCLientes, 'utf-8');
+
      
     });
  
@@ -136,11 +177,10 @@ function miTabla(misDatos) {
 
 
 function tablaMisClientes(misDatos) {
+
+    document.getElementById("actualizarMontoTotal").disabled = true
+    document.getElementById("agregar").disabled = true
     
-    const { ipcRenderer } = require('electron');
-    ipcRenderer.on('datosJson', (e, datos) => {
-        misDatos =  datos
-    });
 
     var table = new Tabulator("#tableClientes", {
         printConfig:{
@@ -153,66 +193,54 @@ function tablaMisClientes(misDatos) {
         clipboard:true,
         clipboardPasteAction:"replace",
         columns:[
-            {title:"Nombre", field:"nombre", width:180,bottomCalc:"count", editor:"input",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
-            {title:"Apellido", field:"apellido", width:180, editor:"input",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
-            {title:"Dirección", field:"dom", width:180, editor:"input",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
-            {title:"Teléfono", field:"tel", width:180, editor:"input",cssClass:"table-bordered",cssClass:"table-primary"},
-            {title:"Reputación", field:"rep", width:180, editor:"select", editorParams:{values:{Mala:"Mala",Regular:"Regular",Buena:"Buena",Excelente:"Exelente"}},cssClass:"table-bordered",cssClass:"table-primary"},
-            {title:"Numero de Cliente", field:"numCliente", width:180, editor:"input",cssClass:"table-bordered",cssClass:"table-primary"}
+            {formatter: "rowSelection", titleFormatter: "rowSelection", align: "center", headerSort: false},
+            {title:"Nombre", field:"nombre", width:180,bottomCalc:"count",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
+            {title:"Apellido", field:"apellido", width:180,headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
+            {title:"Dirección", field:"dom", width:180,headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
+            {title:"Teléfono", field:"tel", width:180,cssClass:"table-bordered",cssClass:"table-primary"},
+            {title:"Reputación", field:"reputacion", width:180, editor:"select", editorParams:{values:{Mala:"Mala",Regular:"Regular",Buena:"Buena",Excelente:"Exelente"}},cssClass:"table-bordered",cssClass:"table-primary"},
+            {title:"Numero de Cliente", field:"numCliente", width:180,cssClass:"table-bordered",cssClass:"table-primary"}
         ],
     });
     
 
-        
-    document.querySelector("#actualizarMontoTotal").addEventListener('click',e => {
-        //se actualiza Monto total
-        misDatos['montoTotal'] = table.getData().cantidadCuotas * table.getData().montoCuota
-    
-        for (let index = 0; index < misDatos.length; index++) {
-           misDatos[index]["montoTotal"] = misDatos[index]["cantidadCuotas"]*misDatos[index]["montoCuota"];
-
+    //Eliminar seleccionados.
+    document.querySelector("#borrarfila").addEventListener('click', e => {
+        var selectedRows = table.getSelectedRows ();
+        for (let index = 0; index < selectedRows.length; index++) {
+            selectedRows[index].delete();
+            
         }
-
-        //se guardan los datos actulizados de la tabla en el archivo
-        var data = table.getData();
-        
-        var jsonCLientes = JSON.stringify(data);
-    
-        fs.writeFileSync('src/views/tabla.json', jsonCLientes, 'utf-8');
-     
-    });
-        
+   
+    })
 
    
 
     document.querySelector("#guardarCambios").addEventListener('click', e => {
 
-        //se actualiza Monto total
-        misDatos['montoTotal'] = table.getData().cantidadCuotas * table.getData().montoCuota
-    
-        for (let index = 0; index < misDatos.length; index++) {
-           misDatos[index]["montoTotal"] = misDatos[index]["cantidadCuotas"]*misDatos[index]["montoCuota"];
-
-        }
 
         //se guardan los datos actulizados de la tabla en el archivo
         var data = table.getData();
         
         var jsonCLientes = JSON.stringify(data);
     
-        fs.writeFileSync('src/views/tabla.json', jsonCLientes, 'utf-8');
+        fs.writeFileSync('src/views/MisClientes.json', jsonCLientes, 'utf-8');
+
      
     });
 }
 
 
-
+//se genera nueva estructura para aquello objetos con solo la fecha actual
 let datosEnfecha = [];
+
 
 //se lee fecha actual
 var f = new Date();
 var fechaHoy = f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear();
-//se genera nueva estructura para aquello objetos con solo la fecha actual
+
+
+//se recorre los archivos que se lvantaron buscando solo los que coinciden con la fecha actual.
 for (let index = 0; index < datosJson.length; index++) {
     
    if (fechaHoy === datosJson[index]["fechadepago"]) {
@@ -224,6 +252,8 @@ for (let index = 0; index < datosJson.length; index++) {
     
 }
 
+
+//Indicadores de seguimiento para las tablas, cada tabla mostrata un titulo que referencia que tipo de tabla es.
 document.querySelector("#fechaHoy").addEventListener('click', () => { miTabla(datosEnfecha),
             document.getElementById("tipoTabla").innerHTML = `<div class="bs-component">
             <div class="alert alert-dismissible alert-info">
@@ -231,7 +261,8 @@ document.querySelector("#fechaHoy").addEventListener('click', () => { miTabla(da
             </div></div>`
         });
 
-document.querySelector("#boton").addEventListener('click', () => { miTabla(datosJson)
+document.querySelector("#clientesActivos").addEventListener('click', () => { 
+            miTabla(datosJson)
             document.getElementById("tipoTabla").innerHTML = `<div class="bs-component">
             <div class="alert alert-dismissible alert-info">
             <strong>   Todos los clientes activos  </strong>
@@ -239,13 +270,16 @@ document.querySelector("#boton").addEventListener('click', () => { miTabla(datos
 
 
         });
-document.querySelector("#misClientes").addEventListener('click', () => { tablaMisClientes(datosJson)
+
+document.querySelector("#misClientes").addEventListener('click', () => { tablaMisClientes(MisClientes)
             document.getElementById("tipoTabla").innerHTML = `<div class="bs-component">
             <div class="alert alert-dismissible alert-info">
             <strong>Mis Clientes</strong>
             </div></div>`});
 
 
+
+//si en la estructura datosEnFecha esta vacia se informa en pantalla. Caso contrario se se cargan los clientes con la fecha actual.            
 if (datosEnfecha.length === 0 ) {
     
     document.getElementById("#alert").innerHTML = `<div class="alert alert-dismissible alert-success">
@@ -254,6 +288,10 @@ if (datosEnfecha.length === 0 ) {
    
 }else {
     miTabla(datosEnfecha);
-}
+    document.getElementById("tipoTabla").innerHTML = `<div class="bs-component">
+    <div class="alert alert-dismissible alert-info">
+    <strong>Clientes para pagar en el dia de la fecha ${fechaHoy}</strong>
+    </div></div>`
 
+}
 

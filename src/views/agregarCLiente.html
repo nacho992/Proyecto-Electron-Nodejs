@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Buscar Cliente</title>
+    <link rel="stylesheet" href="./bootstrap.min.css">
+</head>
+    <body>
+        <form class="p-4">
+            <div class="form-group">
+                <label >Ingresar número del Cliente</label>
+                <input type="text" id="buscar" class="form-control" placeholder="Buscar Cliente" autofocus>
+            </div>
+            <button class="btn btn-primary btn-block">
+                Buscar Cliente
+            </button>
+        </form>
+
+        
+        <script>
+            const { ipcRenderer } = require('electron');
+
+            const form = document.querySelector('form');
+            
+            form.addEventListener('submit', e => {
+                e.preventDefault();
+
+                const numero = document.querySelector('#buscar').value;
+
+                ipcRenderer.send('cliente', numero);
+                
+    
+            });
+        
+        </script>
+        
+    </body>
+</html>

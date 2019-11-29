@@ -12,6 +12,7 @@
   "dependencies": {
     "electron": "^3.0.10",
     "moment": "^2.24.0",
+    "smalltalk": "^4.0.2",
     "tabulator-tables": "^4.4.3"
   },
   "devDependencies": {

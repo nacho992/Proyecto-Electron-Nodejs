@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, ipcMain } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron');
 
 const url = require('url');
 const path = require('path');
@@ -6,6 +6,7 @@ const fs = require('fs');
 
 let mainWindow;
 let newProductWindow;
+let ventanaEditar;
 
 
 // Reload in Development for Browser Windows
@@ -39,7 +40,6 @@ app.on('ready', () => {
  
 
 });
-
 
 
 function createNewProductWindow() {
@@ -76,7 +76,7 @@ ipcMain.on('product:new', (e, newProduct) => {
   fs.writeFileSync('src/views/tablaProd.json', jsonProd, 'utf-8');
 
   
-  mainWindow.webContents.send('product:new', newProduct);
+  //mainWindow.webContents.send('product:new', newProduct);
 
 });
 
@@ -102,27 +102,64 @@ function crearCliente() {
 
 // Ipc Renderer Events
 ipcMain.on('cliente:new', (e, nuevoCliente) => {
-  // recibe mensaje de new-ckiente
+  // recibe mensaje de new-cliente
   console.log(nuevoCliente);
 
-  const datosCliente = fs.readFileSync('src/views/tabla.json', 'utf-8'); //Leo Json
+  const datosCliente = fs.readFileSync('src/views/tabla.json', 'utf-8'); //Leo Json que contiene cantidad de cuotas y montos.
+  const datosC = fs.readFileSync('src/views/MisClientes.json', 'utf-8');
+  
 
   const datosClientesParse = JSON.parse(datosCliente);
+  const datosCParse = JSON.parse(datosC);
 
-  datosClientesParse.push(nuevoCliente)
+
+  //se verifica por numero de cliente que no se repita
+  var ok = true;
+  for (let index = 0; index < datosCParse.length; index++) {
+    if (datosCParse[index]["numCliente"] === nuevoCliente["numCliente"]) {
+      dialog.showErrorBox('Cliente repetido','El numero de cliente ya existe');
+      ok = false;
+    }
+  }
+  if (ok) {
+    datosClientesParse.push(nuevoCliente);
+    datosCParse.push(nuevoCliente);
+  }
+  
 
   const jsonCLientes = JSON.stringify(datosClientesParse);
+  const jsonC = JSON.stringify(datosCParse);
 
   fs.writeFileSync('src/views/tabla.json', jsonCLientes, 'utf-8');
+  fs.writeFileSync('src/views/MisClientes.json', jsonC, 'utf-8');
 
   
-  mainWindow.webContents.send('cliente:new', nuevoCliente);
-  //nuevaVentana.close();
 });
 
+function backup(){
 
+    const datosCliente = fs.readFileSync('src/views/tabla.json', 'utf-8');
+    const datosC = fs.readFileSync('src/views/MisClientes.json', 'utf-8');
 
-
+    fs.appendFile('ClientesActivos.json',datosCliente ,'utf-8', (err) => {
+      if (err) throw err;
+      console.log('Archivo Creado Satisfactoriamente');
+    });
+    fs.appendFile('misClientes.json',datosC ,'utf-8', (err) => {
+      if (err) throw err;
+      console.log('Archivo Creado Satisfactoriamente');
+    });
+    const options = {
+      type: 'info',
+      buttons: ['Ok'],
+      defaultId: 2,
+      title: 'BackUp generado',
+      message: 'Se guardó un backUp exitosamente',
+      detail: 'toda la informacion se guardó correctamente',
+    };
+  
+    dialog.showMessageBox(null, options);
+  }
 // Menu Template
 const templateMenu = [
   {
@@ -143,6 +180,12 @@ const templateMenu = [
         }
       },
       {
+        label: 'BackUp',
+        click() {
+          backup();
+        }
+      },
+      {
         label: 'Salir',
         accelerator: process.platform == 'darwin' ? 'command+Q' : 'Ctrl+Q',
         click() {
@@ -154,12 +197,26 @@ const templateMenu = [
 ];
 
 
-ipcMain.on('datosJson', (e, datos) => {
-  // send to the Main Window
-  console.log(datos);
-  mainWindow.webContents.send('datosJson', datos);
-});
 
+exports.BuscarCliente = () => {
+
+  nuevaVentana = new BrowserWindow({
+    width: 500,
+    height: 250,
+    title: 'Buscar'
+  ,webPreferences: { nodeIntegration: true }});
+  //nuevaVentana.setMenu(null);
+
+  nuevaVentana.loadURL(url.format({
+    pathname: path.join(__dirname, '/views/agregarCLiente.html'),
+    protocol: 'file',
+    slashes: true
+  }));
+  nuevaVentana.on('closed', () => {
+    nuevaVentana = null;
+  });
+
+}
 
 
 exports.nuevoCli = () => {
@@ -180,6 +237,37 @@ exports.nuevoCli = () => {
     nuevaVentana = null;
   });
 }
+
+
+ipcMain.on('cliente', (e, numero) => {
+  // send to the Main Window
+  console.log(numero);
+  mainWindow.webContents.send('cliente', numero);
+});
+
+
+exports.editarCli = () => {
+  
+  ventanaEditar = new BrowserWindow({
+    width: 500,
+    height: 430,
+    title: 'Editar cliente'
+  ,webPreferences: { nodeIntegration: true }});
+  //ventanaEditar.setMenu(null);
+
+  ventanaEditar.loadURL(url.format({
+    pathname: path.join(__dirname, '/views/editarCliente.html'),
+    protocol: 'file',
+    slashes: true
+  }));
+  ventanaEditar.on('closed', () => {
+    ventanaEditar = null;
+  });
+}
+
+
+
+
 
 
 exports.nuevoProd = () => {
