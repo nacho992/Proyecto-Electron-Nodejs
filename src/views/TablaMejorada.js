@@ -1,4 +1,4 @@
-
+//se levanta los datos del archivo
 let datosClientes
 let datosJson
 
@@ -34,14 +34,7 @@ if(fs.existsSync("src/views/MisClientes.json")){
     if (err) throw err;});
 }
 
-
-//se levanta los datos del archivo
-//const datosClientes = fs.readFileSync('src/views/tabla.json', 'utf-8');
-//let datosJson = JSON.parse(datosClientes);
-
-//const datosCli = fs.readFileSync('src/views/MisClientes.json', 'utf-8');
-//let MisClientes = JSON.parse(datosCli);
-
+//se generan las tablas
 
 var Tabulator = require('tabulator-tables');
 
@@ -291,7 +284,7 @@ if (datosJson != null ) {
 }
 
 
-
+//se inician las tablas
 //Indicadores de seguimiento para las tablas, cada tabla mostrata un titulo que referencia que tipo de tabla es.
 document.querySelector("#fechaHoy").addEventListener('click', () => { miTabla(datosEnfecha),
             document.getElementById("tipoTabla").innerHTML = `<div class="bs-component">
