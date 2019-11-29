@@ -1,10 +1,36 @@
 
-//se levanta los datos del archivo
-const datosClientes = fs.readFileSync('src/views/tabla.json', 'utf-8');
-let datosJson = JSON.parse(datosClientes);
+let datosClientes
+let datosJson
 
-const datosCli = fs.readFileSync('src/views/MisClientes.json', 'utf-8');
-let MisClientes = JSON.parse(datosCli);
+let datosCli 
+let MisClientes
+if(fs.existsSync("src/views/tabla.json")){
+
+        datosClientes = fs.readFileSync('src/views/tabla.json', 'utf-8');
+        datosJson = JSON.parse(datosClientes);
+}else{
+    datosJson = []
+    fs.appendFile('src/views/tabla.json', [], (err) => {
+        if (err) throw err;});
+}
+
+if(fs.existsSync("src/views/MisClientes.json")){
+
+    datosCli = fs.readFileSync('src/views/MisClientes.json', 'utf-8');
+    MisClientes = JSON.parse(datosCli);
+}else{
+    MisClientes = []
+    fs.appendFile('src/views/MisClientes.json', [], (err) => {
+    if (err) throw err;});
+}
+
+
+//se levanta los datos del archivo
+//const datosClientes = fs.readFileSync('src/views/tabla.json', 'utf-8');
+//let datosJson = JSON.parse(datosClientes);
+
+//const datosCli = fs.readFileSync('src/views/MisClientes.json', 'utf-8');
+//let MisClientes = JSON.parse(datosCli);
 
 
 var Tabulator = require('tabulator-tables');

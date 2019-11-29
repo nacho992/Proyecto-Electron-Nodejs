@@ -9,14 +9,14 @@ let newProductWindow;
 let ventanaEditar;
 
 
-// Reload in Development for Browser Windows
+// Por cada cambio en algun ficher, se actualiza la pagina principal
 if(process.env.NODE_ENV !== 'production') {
   require('electron-reload')(__dirname, {
     electron: path.join(__dirname, '../node_modules', '.bin', 'electron')
   });
 }
 
-
+//se crea ventana principal
 app.on('ready', () => {
 
   // The Main Window
@@ -60,7 +60,8 @@ function createNewProductWindow() {
   });
 }
 
-// recibe el mensaje desde new-Product
+
+// recibe el mensaje desde new-Product y se guarda en archivo
 ipcMain.on('product:new', (e, newProduct) => {
 
   console.log(newProduct);
@@ -79,6 +80,9 @@ ipcMain.on('product:new', (e, newProduct) => {
   //mainWindow.webContents.send('product:new', newProduct);
 
 });
+
+
+
 
 function crearCliente() {
   nuevaVentana = new BrowserWindow({
@@ -100,7 +104,7 @@ function crearCliente() {
 
 
 
-// Ipc Renderer Events
+//Recibe el mensaje con el nuevo cliente y se guarda en los archivos
 ipcMain.on('cliente:new', (e, nuevoCliente) => {
   // recibe mensaje de new-cliente
   console.log(nuevoCliente);
@@ -136,6 +140,8 @@ ipcMain.on('cliente:new', (e, nuevoCliente) => {
   
 });
 
+
+
 function backup(){
 
     const datosCliente = fs.readFileSync('src/views/tabla.json', 'utf-8');
@@ -160,6 +166,8 @@ function backup(){
   
     dialog.showMessageBox(null, options);
   }
+
+
 // Menu Template
 const templateMenu = [
   {
@@ -268,8 +276,6 @@ exports.editarCli = () => {
 
 
 
-
-
 exports.nuevoProd = () => {
 
   newProductWindow = new BrowserWindow({
@@ -289,6 +295,9 @@ exports.nuevoProd = () => {
   });
 
 }
+
+
+
 
 // if you are in Mac, just add the Name of the App
 if (process.platform === 'darwin') {
