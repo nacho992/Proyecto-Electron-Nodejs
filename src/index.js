@@ -61,28 +61,36 @@ function createNewProductWindow() {
 }
 
 
-// recibe el mensaje desde new-Product y se guarda en archivo
+
+//-----Guardar producto en archivo------//
+let datosProdParse
+// recibe el mensaje desde new-Product.html y se guarda en archivo
 ipcMain.on('product:new', (e, newProduct) => {
 
-  console.log(newProduct);
 
   const datosProd = fs.readFileSync('src/views/tablaProd.json', 'utf-8'); //Leo Json
 
-  const datosProdParse = JSON.parse(datosProd); //se pasan los datos leidos a tipo objeto
+  if (datosProd != '') {
 
+     datosProdParse = JSON.parse(datosProd); //se pasan los datos leidos a tipo objeto
+
+  }else{
+
+    datosProdParse = []
+
+  }
+  
   datosProdParse.push(newProduct) //se almacenan los objetos nuevos con los viejos leidos anteriormente
 
   const jsonProd = JSON.stringify(datosProdParse); //se pasa todo a String
 
   fs.writeFileSync('src/views/tablaProd.json', jsonProd, 'utf-8');
 
-  
-  //mainWindow.webContents.send('product:new', newProduct);
 
 });
 
 
-
+//------Crear cliente, se crea la ventana la cual ejecuta el html crear cliente--------------//
 
 function crearCliente() {
   nuevaVentana = new BrowserWindow({
@@ -102,6 +110,7 @@ function crearCliente() {
   });
 }
 
+//-------------------//
 let datosClientesParse;
 let datosCParse;
 //Recibe el mensaje con el nuevo cliente y se guarda en los archivos
@@ -147,7 +156,7 @@ ipcMain.on('cliente:new', (e, nuevoCliente) => {
 
   
 });
-
+//-------------------//
 
 
 function backup(){

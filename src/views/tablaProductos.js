@@ -1,24 +1,39 @@
 const fs = require('fs');
 
 
-const datosProd = fs.readFileSync('src/views/tablaProd.json', 'utf-8');
-let misDatosProd = JSON.parse(datosProd);
+let datosProd
+let misDatosProd
 
+if(fs.existsSync("src/views/tablaProd.json")){
 
+    datosProd = fs.readFileSync('src/views/tablaProd.json', 'utf-8');
+    if (datosProd !== '') {
+        misDatosProd = JSON.parse(datosProd);
+    }
+    
+}else{
+
+    misDatosProd = []
+    fs.appendFile('src/views/tablaProd.json', misDatosProd, (err) => {
+        if (err) throw err;});
+}
 
 
 var Tabulator = require('tabulator-tables');
 
 
-function miTablaProd() {
+function miTablaProd(datos) {
+    document.getElementById("actualizarMontoTotal").disabled = true
+    document.getElementById("agregar").disabled = true
     
-    var table = new Tabulator("#tableProductos", {
+    var table = new Tabulator("#tableClientes", {
         
         height:"400px",
-        data:misDatosProd,
+        data:datos,
         clipboard:true,
         clipboardPasteAction:"replace",
         columns:[
+            {formatter: "rowSelection", titleFormatter: "rowSelection", align: "center", headerSort: false,print:false},
             {title:"Nombre", field:"name", width:180, editor:"input",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
             {title:"Precio unitario", field:"price", width:180, editor:"input",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
             {title:"Descripcion", field:"description", width:180, editor:"input",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
@@ -26,22 +41,35 @@ function miTablaProd() {
             {title:"Cantidad Disponible", field:"cantidad", width:180, editor:"input",cssClass:"table-bordered",cssClass:"table-primary"}
         ],
     });
+
+    document.querySelector("#borrarfila").addEventListener('click', e => {
+        var selectedRows = table.getSelectedRows ();
+        for (let index = 0; index < selectedRows.length; index++) {
+            selectedRows[index].delete();
+            
+        }
+   
+    })
     
     
     document.querySelector("#guardarCambios").addEventListener('click', e => {
         var dataTable = table.getData();
     
-        var jsonCLientes = JSON.stringify(dataTable);
+        var jsonProd = JSON.stringify(dataTable);
     
-        fs.writeFileSync('src/views/tablaProd.json', jsonCLientes, 'utf-8');
+        fs.writeFileSync('src/views/tablaProd.json', jsonProd, 'utf-8');
      
     });
  
     
 }
-document.querySelector("#stock").addEventListener('click', miTablaProd);
 
-
+document.querySelector("#stock").addEventListener('click', () => { miTablaProd(misDatosProd),
+    document.getElementById("tipoTabla").innerHTML = `<div class="bs-component">
+    <div class="alert alert-dismissible alert-info">
+    <strong>Stock Productos</strong>
+    </div></div>`
+});
 
 
 //Create Date Editor

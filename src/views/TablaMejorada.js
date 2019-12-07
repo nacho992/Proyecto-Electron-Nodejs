@@ -1,4 +1,5 @@
 //se levanta los datos del archivo
+
 let datosClientes
 let datosJson
 
@@ -7,7 +8,6 @@ let MisClientes
 if(fs.existsSync("src/views/tabla.json")){
 
         datosClientes = fs.readFileSync('src/views/tabla.json', 'utf-8');
-        console.log(datosClientes);
         if (datosClientes !== '') {
             datosJson = JSON.parse(datosClientes);
         }
@@ -15,14 +15,13 @@ if(fs.existsSync("src/views/tabla.json")){
 }else{
 
     datosJson = []
-    fs.appendFile('src/views/tabla.json', [], (err) => {
+    fs.appendFile('src/views/tabla.json', datosJson, (err) => {
         if (err) throw err;});
 }
 
 if(fs.existsSync("src/views/MisClientes.json")){
 
     datosCli = fs.readFileSync('src/views/MisClientes.json', 'utf-8');
-    console.log(datosCli);
     if (datosCli !== '') {
         MisClientes = JSON.parse(datosCli);
     }
