@@ -86,6 +86,8 @@ ipcMain.on('product:new', (e, newProduct) => {
 
   fs.writeFileSync('tablaProd.json', jsonProd, 'utf-8');
 
+  mainWindow.reload()
+
 });
 
 
@@ -152,6 +154,8 @@ ipcMain.on('cliente:new', (e, nuevoCliente) => {
 
   fs.writeFileSync('tabla.json', jsonCLientes, 'utf-8');
   fs.writeFileSync('MisClientes.json', jsonC, 'utf-8');
+
+  mainWindow.reload()
 });
 //-------------------//
 
@@ -245,7 +249,7 @@ exports.nuevoCli = () => {
   
   nuevaVentana = new BrowserWindow({
     width: 500,
-    height: 430,
+    height: 600,
     title: 'Agregar un nuevo cliente'
   ,webPreferences: { nodeIntegration: true }});
   nuevaVentana.setMenu(null);
@@ -263,7 +267,6 @@ exports.nuevoCli = () => {
 
 ipcMain.on('cliente', (e, numero) => {
   // send to the Main Window
-  console.log(numero);
   mainWindow.webContents.send('cliente', numero);
 });
 
@@ -273,9 +276,9 @@ exports.editarCli = () => {
   ventanaEditar = new BrowserWindow({
     width: 650,
     height: 730,
-    title: 'Editar cliente'
-  ,webPreferences: { nodeIntegration: true }});
-  //ventanaEditar.setMenu(null);
+    title: 'Editar cliente',
+  webPreferences: { nodeIntegration: true }});
+  ventanaEditar.setMenu(null);
 
   ventanaEditar.loadURL(url.format({
     pathname: path.join(__dirname, '/views/editarCliente.html'),
@@ -284,6 +287,7 @@ exports.editarCli = () => {
   }));
   ventanaEditar.on('closed', () => {
     ventanaEditar = null;
+    mainWindow.reload()
   });
 }
 
