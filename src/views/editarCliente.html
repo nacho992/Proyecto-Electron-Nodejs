@@ -40,10 +40,10 @@
 
           numero = document.querySelector('#buscar').value;
 
-      let datosClientes = fs.readFileSync('src/views/tabla.json', 'utf-8');
+      let datosClientes = fs.readFileSync('tabla.json', 'utf-8');
       datosJson = JSON.parse(datosClientes);
 
-      let datosCli = fs.readFileSync('src/views/MisClientes.json', 'utf-8');
+      let datosCli = fs.readFileSync('MisClientes.json', 'utf-8');
       MisClientes = JSON.parse(datosCli);
 
       
@@ -136,8 +136,8 @@
                     const jsonProd = JSON.stringify(datosJson);
                     const MisClientesSt = JSON.stringify(MisClientes);
 
-                    fs.writeFileSync('src/views/tabla.json', jsonProd, 'utf-8');
-                    fs.writeFileSync('src/views/MisClientes.json', MisClientesSt, 'utf-8');
+                    fs.writeFileSync('tabla.json', jsonProd, 'utf-8');
+                    fs.writeFileSync('MisClientes.json', MisClientesSt, 'utf-8');
                     window.close();
                   });
             </script>

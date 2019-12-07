@@ -1,13 +1,14 @@
 //se levanta los datos del archivo
 
 let datosClientes
-let datosJson
+let datosJson = []
 
 let datosCli 
 let MisClientes
-if(fs.existsSync("src/views/tabla.json")){
 
-        datosClientes = fs.readFileSync('src/views/tabla.json', 'utf-8');
+if(fs.existsSync("tabla.json")){
+
+        datosClientes = fs.readFileSync('tabla.json', 'utf-8');
         if (datosClientes !== '') {
             datosJson = JSON.parse(datosClientes);
         }
@@ -15,13 +16,14 @@ if(fs.existsSync("src/views/tabla.json")){
 }else{
 
     datosJson = []
-    fs.appendFile('src/views/tabla.json', datosJson, (err) => {
+    fs.appendFile('tabla.json', datosJson, (err) => {
         if (err) throw err;});
+        fs.writeFileSync('tabla.json', datosJson, 'utf-8');
 }
 
-if(fs.existsSync("src/views/MisClientes.json")){
+if(fs.existsSync("MisClientes.json")){
 
-    datosCli = fs.readFileSync('src/views/MisClientes.json', 'utf-8');
+    datosCli = fs.readFileSync('MisClientes.json', 'utf-8');
     if (datosCli !== '') {
         MisClientes = JSON.parse(datosCli);
     }
@@ -29,8 +31,9 @@ if(fs.existsSync("src/views/MisClientes.json")){
 
 }else{
     MisClientes = []
-    fs.appendFile('src/views/MisClientes.json', [], (err) => {
+    fs.appendFile('MisClientes.json', [], (err) => {
     if (err) throw err;});
+    fs.writeFileSync('MisClientes.json',MisClientes, 'utf-8');
 }
 
 //se generan las tablas
@@ -103,7 +106,7 @@ function miTabla(misDatos) {
         printAsHtml:true,
         printVisibleRows:false,
         footerElement:"<button type=button class=btn btn-primary id=imprimir>Imprimir</button>",
-        height:"550px",
+        height:"500px",
         data:misDatos,
         clipboard:true,
         clipboardPasteAction:"replace",
@@ -161,7 +164,9 @@ function miTabla(misDatos) {
         
         var jsonCLientes = JSON.stringify(data);
     
-        fs.writeFileSync('src/views/tabla.json', jsonCLientes, 'utf-8');
+        fs.writeFileSync('tabla.json', jsonCLientes, 'utf-8');
+
+        window.location.reload(true);
     
     });
 
@@ -171,9 +176,8 @@ function miTabla(misDatos) {
         var selectedRows = table.getSelectedRows ();
         for (let index = 0; index < selectedRows.length; index++) {
             selectedRows[index].delete();
-            
         }
-   
+        
     })
         
 
@@ -195,9 +199,9 @@ function miTabla(misDatos) {
         
         var jsonCLientes = JSON.stringify(data);
     
-        fs.writeFileSync('src/views/tabla.json', jsonCLientes, 'utf-8');
+        fs.writeFileSync('tabla.json', jsonCLientes, 'utf-8');
 
-     
+        window.location.reload(true);
     });
  
     document.querySelector("#imprimir").addEventListener('click',e => {table.print(false,true)})
@@ -217,7 +221,7 @@ function tablaMisClientes(misDatos) {
             rowGroups:false, //do not include row groups in HTML table
             columnCalcs:false, //do not include column calcs in HTML table
         },
-        height:"550px",
+        height:"500px",
         data:misDatos,
         clipboard:true,
         clipboardPasteAction:"replace",
@@ -253,9 +257,9 @@ function tablaMisClientes(misDatos) {
         
         var jsonCLientes = JSON.stringify(data);
     
-        fs.writeFileSync('src/views/MisClientes.json', jsonCLientes, 'utf-8');
+        fs.writeFileSync('MisClientes.json', jsonCLientes, 'utf-8');
 
-     
+        window.location.reload(true);
     });
 }
 
@@ -268,7 +272,8 @@ var moment = require('moment');
 var fechaHoy = moment().format("DD/MM/YYYY");
 
 //se recorre los archivos que se lvantaron buscando solo los que coinciden con la fecha actual.
-if (datosJson.length !== 0 ) {
+
+if (datosJson.length != 0 ) {
     
     for (let index = 0; index < datosJson.length; index++) {
        

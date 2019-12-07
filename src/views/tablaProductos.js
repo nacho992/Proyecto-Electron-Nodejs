@@ -4,9 +4,9 @@ const fs = require('fs');
 let datosProd
 let misDatosProd
 
-if(fs.existsSync("src/views/tablaProd.json")){
+if(fs.existsSync("tablaProd.json")){
 
-    datosProd = fs.readFileSync('src/views/tablaProd.json', 'utf-8');
+    datosProd = fs.readFileSync('tablaProd.json', 'utf-8');
     if (datosProd !== '') {
         misDatosProd = JSON.parse(datosProd);
     }
@@ -14,8 +14,9 @@ if(fs.existsSync("src/views/tablaProd.json")){
 }else{
 
     misDatosProd = []
-    fs.appendFile('src/views/tablaProd.json', misDatosProd, (err) => {
+    fs.appendFile('tablaProd.json', misDatosProd, (err) => {
         if (err) throw err;});
+    fs.writeFileSync('tablaProd.json',misDatosProd, 'utf-8');
 }
 
 
@@ -28,7 +29,7 @@ function miTablaProd(datos) {
     
     var table = new Tabulator("#tableClientes", {
         
-        height:"550px",
+        height:"500px",
         data:datos,
         clipboard:true,
         clipboardPasteAction:"replace",
@@ -58,7 +59,9 @@ function miTablaProd(datos) {
     
         var jsonProd = JSON.stringify(dataTable);
     
-        fs.writeFileSync('src/views/tablaProd.json', jsonProd, 'utf-8');
+        fs.writeFileSync('tablaProd.json', jsonProd, 'utf-8');
+
+        window.location.reload(true);
      
     });
  
@@ -71,53 +74,3 @@ document.querySelector("#stock").addEventListener('click', () => { miTablaProd(m
     <strong>Stock Productos</strong>
     </div></div>`
 });
-
-
-//Create Date Editor
-var dateEditor = function(cell, onRendered, success, cancel){
-    //cell - the cell component for the editable cell
-    //onRendered - function to call when the editor has been rendered
-    //success - function to call to pass the successfuly updated value to Tabulator
-    //cancel - function to call to abort the edit and return to a normal cell
-
-    //create and style input
-    var cellValue = moment(cell.getValue(), "DD/MM/YYYY").format("YYYY-MM-DD"),
-    input = document.createElement("input");
-
-    input.setAttribute("type", "date");
-
-    input.style.padding = "4px";
-    input.style.width = "100%";
-    input.style.boxSizing = "border-box";
-
-    input.value = cellValue;
-
-    onRendered(function(){
-        input.focus();
-        input.style.height = "100%";
-    });
-
-    function onChange(){
-        if(input.value != cellValue){
-            success(moment(input.value, "YYYY-MM-DD").format("DD/MM/YYYY"));
-        }else{
-            cancel();
-        }
-    }
-
-    //submit new value on blur or change
-    input.addEventListener("blur", onChange);
-
-    //submit new value on enter
-    input.addEventListener("keydown", function(e){
-        if(e.keyCode == 13){
-            onChange();
-        }
-
-        if(e.keyCode == 27){
-            cancel();
-        }
-    });
-
-    return input;
-};

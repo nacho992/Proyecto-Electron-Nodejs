@@ -1,21 +1,27 @@
 {
-  "name": "electron-products-crud",
+  "name": "proyecto-electron",
+  "productName": "Mis Clientes",
   "version": "1.0.0",
-  "description": "",
+  "description": "Mis clientes y Stock",
   "main": "src/index.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron src/index.js",
+    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds",
+    "package-win": "electron-packager . MisClientes --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"MisClientes\"",
+    "package-linux": "electron-packager . MisClientes --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/png/1024x1024.png --prune=true --out=release-builds"
   },
   "keywords": [],
-  "author": "",
+  "author": "Nacho",
   "license": "ISC",
   "dependencies": {
-    "electron": "^3.0.10",
+    "electron-reload": "^1.5.0",
+    "fs": "0.0.1-security",
     "moment": "^2.24.0",
     "smalltalk": "^4.0.2",
     "tabulator-tables": "^4.4.3"
   },
   "devDependencies": {
-    "electron-reload": "^1.5.0"
+    "electron": "^3.0.10",
+    "electron-builder": "^21.2.0"
   }
 }

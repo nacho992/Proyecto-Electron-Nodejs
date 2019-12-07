@@ -68,7 +68,7 @@ let datosProdParse
 ipcMain.on('product:new', (e, newProduct) => {
 
 
-  const datosProd = fs.readFileSync('src/views/tablaProd.json', 'utf-8'); //Leo Json
+  const datosProd = fs.readFileSync('tablaProd.json', 'utf-8'); //Leo Json
 
   if (datosProd != '') {
 
@@ -84,8 +84,7 @@ ipcMain.on('product:new', (e, newProduct) => {
 
   const jsonProd = JSON.stringify(datosProdParse); //se pasa todo a String
 
-  fs.writeFileSync('src/views/tablaProd.json', jsonProd, 'utf-8');
-
+  fs.writeFileSync('tablaProd.json', jsonProd, 'utf-8');
 
 });
 
@@ -118,14 +117,14 @@ ipcMain.on('cliente:new', (e, nuevoCliente) => {
   // recibe mensaje de new-cliente
 
 
-  const datosClientes = fs.readFileSync('src/views/tabla.json', 'utf-8'); //Leo Json que contiene cantidad de cuotas y montos.
+  const datosClientes = fs.readFileSync('tabla.json', 'utf-8'); //Leo Json que contiene cantidad de cuotas y montos.
   if (datosClientes != '' ) {            //se verifica que si el archivo no estaba vacio.
      datosClientesParse = JSON.parse(datosClientes);
   } else {
      datosClientesParse = []
   }
 
-  const datosC = fs.readFileSync('src/views/MisClientes.json', 'utf-8');
+  const datosC = fs.readFileSync('MisClientes.json', 'utf-8');
   if (datosC != '' ) {
     datosCParse = JSON.parse(datosC);
   } else {
@@ -151,18 +150,16 @@ ipcMain.on('cliente:new', (e, nuevoCliente) => {
   const jsonCLientes = JSON.stringify(datosClientesParse);
   const jsonC = JSON.stringify(datosCParse);
 
-  fs.writeFileSync('src/views/tabla.json', jsonCLientes, 'utf-8');
-  fs.writeFileSync('src/views/MisClientes.json', jsonC, 'utf-8');
-
-  
+  fs.writeFileSync('tabla.json', jsonCLientes, 'utf-8');
+  fs.writeFileSync('MisClientes.json', jsonC, 'utf-8');
 });
 //-------------------//
 
 
 function backup(){
 
-    const datosCliente = fs.readFileSync('src/views/tabla.json', 'utf-8');
-    const datosC = fs.readFileSync('src/views/MisClientes.json', 'utf-8');
+    const datosCliente = fs.readFileSync('tabla.json', 'utf-8');
+    const datosC = fs.readFileSync('MisClientes.json', 'utf-8');
 
     fs.appendFile('ClientesActivos.json',datosCliente ,'utf-8', (err) => {
       if (err) throw err;
