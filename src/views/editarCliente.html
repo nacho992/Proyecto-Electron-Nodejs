@@ -7,39 +7,79 @@
 </head>
 <body>
 
+
+
+
+
+  <form class="p-4">
+    <div class="form-group">
+        <label >Ingresar número del Cliente</label>
+        <input type="text" id="buscar" class="form-control" placeholder="Buscar Cliente" autofocus>
+    </div>
+    <button class="btn btn-primary btn-block">
+        Buscar Cliente
+    </button>
+  </form>
+
+
+
   <script>
-    
-  
-      const fs = require('fs');
+   let clienteEditar;
+   let clienteMis;
+   let datosJson;
+   let MisClientes;
+   let pos;
+   let posMis;
+
+   let fs = require('fs');
+
+   const formu = document.querySelector('form');
+   var numero;
+   formu.addEventListener('submit', e => {
+          e.preventDefault();
+
+          numero = document.querySelector('#buscar').value;
 
       let datosClientes = fs.readFileSync('src/views/tabla.json', 'utf-8');
-      let datosJson = JSON.parse(datosClientes);
+      datosJson = JSON.parse(datosClientes);
 
       let datosCli = fs.readFileSync('src/views/MisClientes.json', 'utf-8');
-      let MisClientes = JSON.parse(datosCli);
+      MisClientes = JSON.parse(datosCli);
 
-      let clienteEditar = {}
-      let pos;
+      
+      
       for (let index = 0; index < datosJson.length; index++) {
-        if(datosJson[index]["nombre"].indexOf('*') !== -1){
+        if(datosJson[index]["numCliente"] === numero){
             clienteEditar = datosJson[index]
             pos = index;
         }
       };
-      let clienteMis = {}
-      let posMis;
+
+      
+      
       for (let index = 0; index < MisClientes.length; index++) {
-        if(MisClientes[index]["nombre"].indexOf('*') !== -1){
+        if(MisClientes[index]["numCliente"] === numero){
           clienteMis = MisClientes[index]
             posMis = index;
         }
       };
-      
 
+
+      const form = document.querySelector("#form2");
+        if(clienteEditar !== {}){
+          form.nombre.value = clienteEditar["nombre"];
+          form.apellido.value = clienteEditar["apellido"];
+          form.tel.value = clienteEditar["tel"];
+          form.dir.value = clienteEditar["dom"];
+          form.numCli.value = clienteEditar["numCliente"];
+          form.rep.value = clienteEditar["reputacion"];
+        }
+    });// fin de formu.addEventListener
+    
   </script>
 
 
-        <form class="p-4">
+        <form class="p-4" id="form2">
                 <div class="form-group">
                     <label >Ingresar datos del Cliente</label>
                   <input type="text" id="nombre" class="form-control" placeholder="nombre" autofocus>
@@ -63,50 +103,45 @@
                   Guardar Cliente
                 </button>
               </form>
-
-
               <script>
-                    console.log(clienteEditar);
-                    const form = document.querySelector('form');
-                    form.nombre.value = clienteEditar["nombre"];
-                    form.apellido.value = clienteEditar["apellido"];
-                    form.tel.value = clienteEditar["tel"];
-                    form.dir.value = clienteEditar["dom"];
-                    form.numCli.value = clienteEditar["numCliente"];
-                    form.rep.value = clienteEditar["reputacion"];
+                  const form2 = document.querySelector('#form2');
 
-                    form.addEventListener('submit', e => {
-                          e.preventDefault();
-
-                          //---------para un archivos--------------
-                          clienteEditar["nombre"] = document.querySelector('#nombre').value;
-                          clienteEditar["apellido"] = document.querySelector('#apellido').value;
-                          clienteEditar["tel"] = document.querySelector('#tel').value;
-                          clienteEditar["dom"] = document.querySelector('#dir').value;
-                          clienteEditar["numCliente"] = document.querySelector('#numCli').value;
-                          clienteEditar["reputacion"] = document.querySelector('#rep').value;
-                          //----------para otro archivo-------------------------------------
-                          clienteMis["nombre"] = document.querySelector('#nombre').value;
-                          clienteMis["apellido"] = document.querySelector('#apellido').value;
-                          clienteMis["tel"] = document.querySelector('#tel').value;
-                          clienteMis["dom"] = document.querySelector('#dir').value;
-                          clienteMis["numCliente"] = document.querySelector('#numCli').value;
-                          clienteMis["reputacion"] = document.querySelector('#rep').value;
-
-
+                  form2.addEventListener('submit', e => {
+                        e.preventDefault();
                         
-                      datosJson[pos] = clienteEditar;
-                      MisClientes[posMis] = clienteMis;
+
+                        //---------para un archivos--------------
+                        clienteEditar["nombre"] = document.querySelector('#nombre').value;
+                        clienteEditar["apellido"] = document.querySelector('#apellido').value;
+                        clienteEditar["tel"] = document.querySelector('#tel').value;
+                        clienteEditar["dom"] = document.querySelector('#dir').value;
+                        clienteEditar["numCliente"] = document.querySelector('#numCli').value;
+                        clienteEditar["reputacion"] = document.querySelector('#rep').value;
+                        //----------para otro archivo-------------------------------------
+                        clienteMis["nombre"] = document.querySelector('#nombre').value;
+                        clienteMis["apellido"] = document.querySelector('#apellido').value;
+                        clienteMis["tel"] = document.querySelector('#tel').value;
+                        clienteMis["dom"] = document.querySelector('#dir').value;
+                        clienteMis["numCliente"] = document.querySelector('#numCli').value;
+                        clienteMis["reputacion"] = document.querySelector('#rep').value;
+                  
+
                       
+                    datosJson[pos] = clienteEditar;
+                    MisClientes[posMis] = clienteMis;
 
-                      const jsonProd = JSON.stringify(datosJson);
-                      const MisClientesSt = JSON.stringify(MisClientes);
+                    console.log(datosJson,MisClientes);
+                    
 
-                      fs.writeFileSync('src/views/tabla.json', jsonProd, 'utf-8');
-                      fs.writeFileSync('src/views/MisClientes.json', MisClientesSt, 'utf-8');
-                      window.close();
-                    });
-              </script>
+                    const jsonProd = JSON.stringify(datosJson);
+                    const MisClientesSt = JSON.stringify(MisClientes);
+
+                    fs.writeFileSync('src/views/tabla.json', jsonProd, 'utf-8');
+                    fs.writeFileSync('src/views/MisClientes.json', MisClientesSt, 'utf-8');
+                    window.close();
+                  });
+            </script>
+
 
 </body>
 </html>

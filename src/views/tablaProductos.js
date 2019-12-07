@@ -28,7 +28,7 @@ function miTablaProd(datos) {
     
     var table = new Tabulator("#tableClientes", {
         
-        height:"400px",
+        height:"550px",
         data:datos,
         clipboard:true,
         clipboardPasteAction:"replace",
@@ -36,9 +36,10 @@ function miTablaProd(datos) {
             {formatter: "rowSelection", titleFormatter: "rowSelection", align: "center", headerSort: false,print:false},
             {title:"Nombre", field:"name", width:180, editor:"input",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
             {title:"Precio unitario", field:"price", width:180, editor:"input",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
-            {title:"Descripcion", field:"description", width:180, editor:"input",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
+            {title:"Roto", field:"roto", width:180, editor:"input",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
+            {title:"Usado", field:"usado", width:180, editor:"input",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
             {title:"Codigo", field:"codigo", width:180, editor:"input",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
-            {title:"Cantidad Disponible", field:"cantidad", width:180, editor:"input",cssClass:"table-bordered",cssClass:"table-primary"}
+            {title:"Cantidad Disponible", field:"cantidad", width:180, editor:"number",cssClass:"table-bordered",cssClass:"table-primary"}
         ],
     });
 

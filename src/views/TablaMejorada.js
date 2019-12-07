@@ -103,20 +103,21 @@ function miTabla(misDatos) {
         printAsHtml:true,
         printVisibleRows:false,
         footerElement:"<button type=button class=btn btn-primary id=imprimir>Imprimir</button>",
-        height:"400px",
+        height:"550px",
         data:misDatos,
         clipboard:true,
         clipboardPasteAction:"replace",
         columns:[
             {formatter: "rowSelection", titleFormatter: "rowSelection", align: "center", headerSort: false,print:false},
-            {title:"Nombre", field:"nombre", width:180,bottomCalc:"count", editor:"input",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
+            {title:"Nombre", field:"nombre", width:180,bottomCalc:"count",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
+            {title:"Codigo", field:"cod", editor:"input",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
             {title:"Zona", field:"zona", width:180, editor:"input",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
-            {title:"Dirección", field:"dom", width:180, editor:"input",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
-            {title:"Telefono", field:"tel", width:180, editor:"input",cssClass:"table-bordered",cssClass:"table-primary"},
-            {title:"Cantidad de cuotas", field:"cantidadCuotas", width:180, editor:"number",cssClass:"table-bordered",cssClass:"table-primary"},
-            {title:"Monto", field:"montoCuota", width:180, editor:"input",cssClass:"table-bordered",cssClass:"table-primary"},
-            {title:"Monto Total", field:"montoTotal", width:180,bottomCalc:"sum",cssClass:"table-bordered",cssClass:"table-primary"},
-            {title:"Fecha de Pago", field:"fechadepago", width:180, editor:dateEditor, headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
+            {title:"Dirección", field:"dom",headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
+            {title:"Telefono", field:"tel", width:180,cssClass:"table-bordered",cssClass:"table-primary"},
+            {title:"Cantidad de cuotas", field:"cantidadCuotas", editor:"number",cssClass:"table-bordered",cssClass:"table-primary"},
+            {title:"Monto", field:"montoCuota", editor:"input",cssClass:"table-bordered",cssClass:"table-primary"},
+            {title:"Monto Total", field:"montoTotal",bottomCalc:"sum",cssClass:"table-bordered",cssClass:"table-primary"},
+            {title:"Fecha de Pago", field:"fechadepago", editor:dateEditor, headerFilter:"input",cssClass:"table-bordered",cssClass:"table-primary"},
         ],
     });
 
@@ -216,7 +217,7 @@ function tablaMisClientes(misDatos) {
             rowGroups:false, //do not include row groups in HTML table
             columnCalcs:false, //do not include column calcs in HTML table
         },
-        height:"400px",
+        height:"550px",
         data:misDatos,
         clipboard:true,
         clipboardPasteAction:"replace",
@@ -261,26 +262,25 @@ function tablaMisClientes(misDatos) {
 
 //se genera nueva estructura para aquello objetos con solo la fecha actual
 let datosEnfecha = [];
-
+var moment = require('moment');
 
 //se lee fecha actual
-var f = new Date();
-var fechaHoy = f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear();
-
+var fechaHoy = moment().format("DD/MM/YYYY");
 
 //se recorre los archivos que se lvantaron buscando solo los que coinciden con la fecha actual.
-if (datosJson != null ) {
-    for (let index = 0; index < datosJson.length; index++) {
+if (datosJson.length !== 0 ) {
     
-        if (fechaHoy === datosJson[index]["fechadepago"]) {
-     
-            
-            datosEnfecha.push(datosJson[index]);
-     
+    for (let index = 0; index < datosJson.length; index++) {
+       
+        if (fechaHoy == datosJson[index]["fechadepago"]) {
+        
+           datosEnfecha.push(datosJson[index]);
+           
         }
          
      }
 }
+
 
 
 //se inician las tablas

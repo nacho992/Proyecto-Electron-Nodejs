@@ -274,8 +274,8 @@ ipcMain.on('cliente', (e, numero) => {
 exports.editarCli = () => {
   
   ventanaEditar = new BrowserWindow({
-    width: 500,
-    height: 430,
+    width: 650,
+    height: 730,
     title: 'Editar cliente'
   ,webPreferences: { nodeIntegration: true }});
   //ventanaEditar.setMenu(null);
