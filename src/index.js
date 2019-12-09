@@ -45,7 +45,7 @@ app.on('ready', () => {
 function createNewProductWindow() {
   newProductWindow = new BrowserWindow({
     width: 500,
-    height: 460,
+    height: 360,
     title: 'Add A New Product'
   ,webPreferences: { nodeIntegration: true }});
   newProductWindow.setMenu(null);
@@ -96,7 +96,7 @@ ipcMain.on('product:new', (e, newProduct) => {
 function crearCliente() {
   nuevaVentana = new BrowserWindow({
     width: 500,
-    height: 430,
+    height: 500,
     title: 'Agregar un nuevo cliente'
   ,webPreferences: { nodeIntegration: true }});
   nuevaVentana.setMenu(null);
@@ -110,6 +110,8 @@ function crearCliente() {
     nuevaVentana = null;
   });
 }
+
+
 
 //-------------------//
 let datosClientesParse;
@@ -154,7 +156,7 @@ ipcMain.on('cliente:new', (e, nuevoCliente) => {
 
   fs.writeFileSync('tabla.json', jsonCLientes, 'utf-8');
   fs.writeFileSync('MisClientes.json', jsonC, 'utf-8');
-
+  
   mainWindow.reload()
 });
 //-------------------//
@@ -231,7 +233,7 @@ exports.BuscarCliente = () => {
     height: 250,
     title: 'Buscar'
   ,webPreferences: { nodeIntegration: true }});
-  //nuevaVentana.setMenu(null);
+  nuevaVentana.setMenu(null);
 
   nuevaVentana.loadURL(url.format({
     pathname: path.join(__dirname, '/views/agregarCLiente.html'),
@@ -249,7 +251,7 @@ exports.nuevoCli = () => {
   
   nuevaVentana = new BrowserWindow({
     width: 500,
-    height: 600,
+    height: 500,
     title: 'Agregar un nuevo cliente'
   ,webPreferences: { nodeIntegration: true }});
   nuevaVentana.setMenu(null);
@@ -275,7 +277,7 @@ exports.editarCli = () => {
   
   ventanaEditar = new BrowserWindow({
     width: 650,
-    height: 730,
+    height: 650,
     title: 'Editar cliente',
   webPreferences: { nodeIntegration: true }});
   ventanaEditar.setMenu(null);
@@ -298,7 +300,7 @@ exports.nuevoProd = () => {
 
   newProductWindow = new BrowserWindow({
     width: 500,
-    height: 460,
+    height: 360,
     title: ''
   ,webPreferences: { nodeIntegration: true }});
   newProductWindow.setMenu(null);

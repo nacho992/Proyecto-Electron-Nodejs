@@ -1,5 +1,4 @@
 //se levanta los datos del archivo
-
 let datosClientes
 let datosJson = []
 
@@ -264,6 +263,7 @@ function tablaMisClientes(misDatos) {
 }
 
 
+
 //se genera nueva estructura para aquello objetos con solo la fecha actual
 let datosEnfecha = [];
 var moment = require('moment');
@@ -291,43 +291,39 @@ if (datosJson.length != 0 ) {
 //se inician las tablas
 //Indicadores de seguimiento para las tablas, cada tabla mostrata un titulo que referencia que tipo de tabla es.
 document.querySelector("#fechaHoy").addEventListener('click', () => { miTabla(datosEnfecha),
-            document.getElementById("tipoTabla").innerHTML = `<div class="bs-component">
-            <div class="alert alert-dismissible alert-info">
-            <strong>Clientes para pagar en el dia de la fecha ${fechaHoy}</strong>
-            </div></div>`
+            document.getElementById("tipoTabla").innerHTML = `<div class="alert alert-primary">
+            Clientes para pagar en el dia de la fecha<strong> ${fechaHoy}</strong>
+            </div>`
         });
 
-document.querySelector("#clientesActivos").addEventListener('click', () => { 
-            miTabla(datosJson)
-            document.getElementById("tipoTabla").innerHTML = `<div class="bs-component">
-            <div class="alert alert-dismissible alert-info">
-            <strong>   Todos los clientes activos  </strong>
-            </div></div>`
+
+document.querySelector("#clientesActivos").addEventListener('click', () => { miTabla(datosJson)
+            document.getElementById("tipoTabla").innerHTML = `<div class="alert alert-primary">
+            Todos los clientes activos
+            </div>`
 
 
         });
+
 
 document.querySelector("#misClientes").addEventListener('click', () => { tablaMisClientes(MisClientes)
-            document.getElementById("tipoTabla").innerHTML = `<div class="bs-component">
-            <div class="alert alert-dismissible alert-info">
-            <strong>Mis Clientes</strong>
-            </div></div>`});
+            document.getElementById("tipoTabla").innerHTML = `<div class="alert alert-primary role="alert">
+            Mis Clientes</div>`
+        });
 
 
 
 //si en la estructura datosEnFecha esta vacia se informa en pantalla. Caso contrario se se cargan los clientes con la fecha actual.            
 if (datosEnfecha.length === 0 ) {
-    
-    document.getElementById("#alert").innerHTML = `<div class="alert alert-dismissible alert-success">
-    <strong>Sin clientes.</strong> No hay Clientes que deban pagar en el dia de la fecha ${fechaHoy}.
-  </div>`
+ 
+    document.getElementById("tipoTabla").innerHTML = `<div class="alert alert-primary role="alert">
+    Sin clientes. No hay Clientes que deban pagar en el dia de la fecha ${fechaHoy}.</div>`
    
 }else {
     miTabla(datosEnfecha);
-    document.getElementById("tipoTabla").innerHTML = `<div class="bs-component">
-    <div class="alert alert-dismissible alert-info">
-    <strong>Clientes para pagar en el dia de la fecha ${fechaHoy}</strong>
-    </div></div>`
+    document.getElementById("tipoTabla").innerHTML = `<div class="alert alert-primary ">
+    Clientes para pagar en el dia de la fecha ${fechaHoy}
+    </div>`
 
 }
 

@@ -7,7 +7,6 @@ document.querySelector("#agregarCli").addEventListener('click', () =>{
   index.nuevoCli()
 });
 
-
 document.querySelector("#agregarProd").addEventListener('click', () =>{
   index.nuevoProd()
 });
